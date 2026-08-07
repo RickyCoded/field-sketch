@@ -1,0 +1,75 @@
+{
+  "version": 2,
+  "schemaVersion": 2,
+  "job": {
+    "jobName": "Juniper Corner Demonstration",
+    "projectId": "DEMO-V2-001",
+    "jobNumber": "DEMO-1042",
+    "address": "1842 Juniper Meadow Drive, Exampleton, CO",
+    "client": "Sample Drafting Company",
+    "preparedFor": "Training Department",
+    "buyer": "Fictional Buyer",
+    "titleCompany": "Example Title Services",
+    "lender": "Demonstration Community Bank",
+    "fieldWorker": "Demo Field Technician",
+    "inspectionDate": "2026-08-06",
+    "notes": "Fictional training project demonstrating Version 2 measured features.",
+    "date": "2026-08-06"
+  },
+  "canvas": { "gridVisible": true, "gridSize": 24, "snapToGrid": true, "measurementPrecision": "hundredth" },
+  "objects": [],
+  "layers": [],
+  "viewport": { "x": 70, "y": 55, "scale": 0.72 },
+  "mode": "measure",
+  "measuredEntities": [
+    {
+      "id": "demo-residence", "entityType": "structure", "type": "residence", "name": "Residence", "startPoint": { "x": 260, "y": 230 },
+      "closed": true, "stroke": "#235e4e", "fill": "rgba(102,157,139,.16)", "lineWidth": 3, "areaState": "enclosed",
+      "segments": [
+        { "id":"wall-1","parentObjectId":"demo-residence","sequence":1,"length":33.8,"directionMode":"absolute","angle":0,"label":"33.8'","measurementText":"33.8","visibleLabel":true,"labelPosition":{"x":0,"y":0},"startCoordinate":{"x":0,"y":0},"endCoordinate":{"x":0,"y":0},"notes":"Front wall","verified":true,"measurementSource":"field-entry","createdAt":"2026-08-06T15:00:00Z","updatedAt":"2026-08-06T15:00:00Z" },
+        { "id":"wall-2","parentObjectId":"demo-residence","sequence":2,"length":25.5,"directionMode":"relative","turn":"right","turnAngle":90,"label":"25.5'","measurementText":"25.5","visibleLabel":true,"labelPosition":{"x":0,"y":0},"startCoordinate":{"x":0,"y":0},"endCoordinate":{"x":0,"y":0},"verified":true,"measurementSource":"field-entry","createdAt":"2026-08-06T15:01:00Z","updatedAt":"2026-08-06T15:01:00Z" },
+        { "id":"wall-3","parentObjectId":"demo-residence","sequence":3,"length":6.1,"directionMode":"relative","turn":"right","turnAngle":90,"label":"6.1'","measurementText":"6.1","visibleLabel":true,"labelPosition":{"x":0,"y":0},"startCoordinate":{"x":0,"y":0},"endCoordinate":{"x":0,"y":0},"notes":"Short projecting jog","verified":true,"measurementSource":"field-entry","createdAt":"2026-08-06T15:02:00Z","updatedAt":"2026-08-06T15:02:00Z" },
+        { "id":"wall-4","parentObjectId":"demo-residence","sequence":4,"length":5.3,"directionMode":"relative","turn":"left","turnAngle":90,"label":"5.3'","measurementText":"5.3","visibleLabel":true,"labelPosition":{"x":0,"y":0},"startCoordinate":{"x":0,"y":0},"endCoordinate":{"x":0,"y":0},"notes":"Jog connector","verified":true,"measurementSource":"field-entry","createdAt":"2026-08-06T15:03:00Z","updatedAt":"2026-08-06T15:03:00Z" },
+        { "id":"wall-5","parentObjectId":"demo-residence","sequence":5,"length":6.1,"directionMode":"relative","turn":"left","turnAngle":90,"label":"6.1'","measurementText":"6.1","visibleLabel":true,"labelPosition":{"x":0,"y":0},"startCoordinate":{"x":0,"y":0},"endCoordinate":{"x":0,"y":0},"notes":"Jog return","verified":true,"measurementSource":"field-entry","createdAt":"2026-08-06T15:04:00Z","updatedAt":"2026-08-06T15:04:00Z" },
+        { "id":"wall-6","parentObjectId":"demo-residence","sequence":6,"length":16.7,"directionMode":"relative","turn":"right","turnAngle":90,"label":"16.7'","measurementText":"16.7","visibleLabel":true,"labelPosition":{"x":0,"y":0},"startCoordinate":{"x":0,"y":0},"endCoordinate":{"x":0,"y":0},"verified":true,"measurementSource":"field-entry","createdAt":"2026-08-06T15:05:00Z","updatedAt":"2026-08-06T15:05:00Z" },
+        { "id":"wall-7","parentObjectId":"demo-residence","sequence":7,"length":27.7,"directionMode":"relative","turn":"right","turnAngle":90,"label":"27.7'","measurementText":"27.7","visibleLabel":true,"labelPosition":{"x":0,"y":0},"startCoordinate":{"x":0,"y":0},"endCoordinate":{"x":0,"y":0},"verified":true,"measurementSource":"field-entry","createdAt":"2026-08-06T15:06:00Z","updatedAt":"2026-08-06T15:06:00Z" },
+        { "id":"wall-8","parentObjectId":"demo-residence","sequence":8,"length":5.3,"directionMode":"relative","turn":"right","turnAngle":90,"label":"5.3'","measurementText":"5.3","visibleLabel":true,"labelPosition":{"x":0,"y":0},"startCoordinate":{"x":0,"y":0},"endCoordinate":{"x":0,"y":0},"notes":"Second short jog","verified":true,"measurementSource":"field-entry","createdAt":"2026-08-06T15:07:00Z","updatedAt":"2026-08-06T15:07:00Z" },
+        { "id":"wall-9","parentObjectId":"demo-residence","sequence":9,"length":39.9,"directionMode":"relative","turn":"right","turnAngle":90,"label":"39.9'","measurementText":"39.9","visibleLabel":true,"labelPosition":{"x":0,"y":0},"startCoordinate":{"x":0,"y":0},"endCoordinate":{"x":0,"y":0},"verified":false,"measurementSource":"field-entry","createdAt":"2026-08-06T15:08:00Z","updatedAt":"2026-08-06T15:08:00Z" }
+      ]
+    }
+  ],
+  "lots": [{
+    "id":"demo-lot","name":"Lot 18","blockInfo":"Block 4","startPoint":{"x":120,"y":100},
+    "sides":[{"id":"lot-n","sequence":1,"length":80,"angle":0,"label":"80'","visible":true},{"id":"lot-e","sequence":2,"length":110,"angle":90,"label":"110'","visible":true},{"id":"lot-s","sequence":3,"length":80,"angle":180,"label":"80'","visible":true},{"id":"lot-w","sequence":4,"length":110,"angle":270,"label":"110'","visible":true}],
+    "vertices":[{"x":120,"y":100},{"x":760,"y":100},{"x":760,"y":980},{"x":120,"y":980}],
+    "streetAssociations":[{"id":"street-a","name":"Juniper Meadow Drive","sideIndex":2},{"id":"street-b","name":"Aspen Court","sideIndex":3}],
+    "adjacentLotLabels":[{"id":"adj-1","lotNumber":"Lot 17","position":{"x":40,"y":460}},{"id":"adj-2","lotNumber":"Lot 19","position":{"x":790,"y":460}}],
+    "notes":"Rectangular fictional demonstration parcel.","boundaryVisible":true,"dimensionsVisible":true,"stroke":"#375d8c","fill":"rgba(90,132,183,.08)","lineWidth":3
+  }],
+  "linkedLabels": [
+    {"id":"label-street-a","type":"street-name","text":"JUNIPER MEADOW DRIVE","linkedObjectId":"demo-lot","position":{"x":350,"y":1010},"orientation":"horizontal","visible":true},
+    {"id":"label-street-b","type":"street-name","text":"ASPEN COURT","linkedObjectId":"demo-lot","position":{"x":65,"y":430},"orientation":"vertical","visible":true},
+    {"id":"label-adj-1","type":"adjacent-lot-number","text":"LOT 17","linkedObjectId":"demo-lot","position":{"x":45,"y":500},"orientation":"horizontal","visible":true},
+    {"id":"label-adj-2","type":"adjacent-lot-number","text":"LOT 19","linkedObjectId":"demo-lot","position":{"x":790,"y":500},"orientation":"horizontal","visible":true}
+  ],
+  "offsets": [
+    {"id":"offset-1","firstFeature":{"kind":"structure-segment","objectId":"demo-residence","segmentId":"wall-1","description":"Residence wall 1"},"secondFeature":{"kind":"lot-side","objectId":"demo-lot","segmentId":"lot-n","description":"North lot line"},"measuredValue":16.25,"calculatedValue":16.25,"label":"Front setback","firstAnchor":{"x":380,"y":230},"secondAnchor":{"x":380,"y":100},"labelAnchor":{"x":395,"y":165},"orientation":"vertical","labelSide":"right","leaderLines":true,"extensionLines":true,"verified":true,"notes":"","createdAt":"2026-08-06T16:00:00Z","updatedAt":"2026-08-06T16:00:00Z"},
+    {"id":"offset-2","firstFeature":{"kind":"structure-segment","objectId":"demo-residence","segmentId":"wall-2","description":"Residence wall 2"},"secondFeature":{"kind":"lot-side","objectId":"demo-lot","segmentId":"lot-e","description":"East lot line"},"measuredValue":2.25,"calculatedValue":2.5,"label":"East side offset","firstAnchor":{"x":740,"y":350},"secondAnchor":{"x":760,"y":350},"labelAnchor":{"x":750,"y":330},"orientation":"horizontal","labelSide":"left","leaderLines":true,"extensionLines":true,"verified":false,"notes":"Scaled value differs from field measurement.","createdAt":"2026-08-06T16:01:00Z","updatedAt":"2026-08-06T16:01:00Z"},
+    {"id":"offset-3","firstFeature":{"kind":"structure-corner","objectId":"demo-residence","segmentId":"4","description":"Residence corner 5"},"secondFeature":{"kind":"lot-side","objectId":"demo-lot","segmentId":"lot-w","description":"West lot line"},"measuredValue":18.5,"calculatedValue":18.5,"label":"West corner offset","firstAnchor":{"x":268,"y":500},"secondAnchor":{"x":120,"y":500},"labelAnchor":{"x":194,"y":480},"orientation":"horizontal","labelSide":"right","leaderLines":true,"extensionLines":true,"verified":true,"notes":"","createdAt":"2026-08-06T16:02:00Z","updatedAt":"2026-08-06T16:02:00Z"},
+    {"id":"offset-4","firstFeature":{"kind":"structure-segment","objectId":"demo-residence","segmentId":"wall-7","description":"Residence rear wall"},"secondFeature":{"kind":"lot-side","objectId":"demo-lot","segmentId":"lot-s","description":"South lot line"},"measuredValue":24.75,"calculatedValue":24.75,"label":"Rear setback","firstAnchor":{"x":420,"y":782},"secondAnchor":{"x":420,"y":980},"labelAnchor":{"x":435,"y":880},"orientation":"vertical","labelSide":"left","leaderLines":true,"extensionLines":true,"verified":true,"notes":"","createdAt":"2026-08-06T16:03:00Z","updatedAt":"2026-08-06T16:03:00Z"}
+  ],
+  "fences": [
+    {"id":"fence-iron","type":"iron","name":"IRON FENCE","startPoint":{"x":120,"y":720},"segments":[{"id":"fi-1","kind":"line","length":28,"directionMode":"absolute","angle":0,"label":"28'"}],"closed":false,"gates":[],"notes":"","label":"IRON FENCE","labelVisible":true,"labelPosition":{"x":220,"y":700},"lineStyle":"cross","areaState":"open"},
+    {"id":"fence-metal","type":"metal","name":"METAL FENCE","startPoint":{"x":520,"y":980},"segments":[{"id":"fm-1","kind":"line","length":30,"directionMode":"absolute","angle":180,"label":"30'"}],"closed":false,"height":4,"gates":[],"notes":"","label":"METAL FENCE","labelVisible":true,"labelPosition":{"x":360,"y":950},"lineStyle":"solid","areaState":"open"},
+    {"id":"fence-stucco","type":"stucco","name":"STUCCO FENCE","startPoint":{"x":760,"y":610},"segments":[{"id":"fs-1","kind":"line","length":32,"directionMode":"absolute","angle":90,"label":"32'"}],"closed":false,"height":6,"gates":[],"notes":"","label":"STUCCO FENCE","labelVisible":true,"labelPosition":{"x":705,"y":740},"lineStyle":"double","areaState":"open"}
+  ],
+  "surfaces": [
+    {"id":"surface-drive","type":"concrete","name":"CONCRETE DRIVE","geometryMode":"polygon","startPoint":{"x":500,"y":100},"segments":[],"vertices":[{"x":500,"y":100},{"x":700,"y":100},{"x":700,"y":230},{"x":560,"y":230}],"dimensions":{"width":25,"height":16.25},"material":"concrete","areaState":"uncovered","notes":"Field polygon; dimensions optional.","pattern":"diagonal","label":"CONCRETE","labelPosition":{"x":580,"y":160}},
+    {"id":"surface-patio","type":"patio","name":"REAR PATIO","geometryMode":"rectangle","startPoint":{"x":330,"y":650},"segments":[],"vertices":[{"x":330,"y":650},{"x":490,"y":650},{"x":490,"y":770},{"x":330,"y":770}],"dimensions":{"width":20,"height":15},"material":"concrete","areaState":"uncovered","notes":"","pattern":"crosshatch","label":"PATIO","labelPosition":{"x":390,"y":700}}
+  ],
+  "projectSettings":{"units":"decimal-feet","displayPrecision":"hundredth","scale":{"feetPerCanvasUnit":0.125,"displayScale":"8 px = 1 ft"},"gridSpacingFeet":3,"northAngle":22},
+  "semanticLayers":[{"id":"property","name":"Property","visible":true,"locked":false,"order":0},{"id":"structures","name":"Structures","visible":true,"locked":false,"order":1},{"id":"fences","name":"Fences","visible":true,"locked":false,"order":2},{"id":"surfaces","name":"Concrete and surfaces","visible":true,"locked":false,"order":3},{"id":"dimensions","name":"Dimensions","visible":true,"locked":false,"order":4},{"id":"labels","name":"Labels","visible":true,"locked":false,"order":5},{"id":"field-notes","name":"Field notes","visible":true,"locked":false,"order":6},{"id":"reference","name":"Reference geometry","visible":true,"locked":false,"order":7}],
+  "fieldNotes":[],"measurementRecords":[],"dimensions":[],
+  "northArrow":{"id":"north-arrow","position":{"x":680,"y":180},"rotation":22,"locked":false,"visible":true,"layerId":"reference"},
+  "fieldChecklist":{"lot-entered":true,"residence-entered":true,"walls-measured":true,"offsets-entered":true,"fence-types":true,"concrete-entered":true,"north-checked":true,"street-labels":true,"unassigned-reviewed":true}
+}

@@ -1,0 +1,13 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './styles.css';
+import './lot.css';
+import './offset.css';
+import './site.css';
+import './field-note.css';
+import './review.css';
+import './job.css';
+import './field-usability.css';
+import './road.css';
+ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><App/></React.StrictMode>);

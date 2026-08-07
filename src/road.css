@@ -1,0 +1,1 @@
+.road-list>div{display:grid;grid-template-columns:1fr 44px;gap:5px;margin-bottom:6px}.road-list>div>button:first-child{margin:0}.road-list>div>button:last-child{border:1px solid #efd7d7;background:#fff5f5;color:#a33e3e;border-radius:8px}.road-list button span,.road-list button strong,.road-list button small{display:block}.road-list button small{color:#75837d;margin-top:3px}

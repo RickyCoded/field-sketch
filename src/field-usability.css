@@ -1,0 +1,20 @@
+/* Outdoor tablet controls intentionally override the compact desktop defaults. */
+.properties button,.properties select,.properties input:not([type="color"]),.properties summary{min-height:44px}
+.direction-grid button,.compass-grid button,.walk-actions button,.wall-rows>button,.wall-toggles button,.insert-actions button{min-height:44px}
+.big-entry input{height:64px;font-size:30px}.tool-button{min-height:52px}
+.wall-rows>button.selected{border-width:3px;box-shadow:0 0 0 2px #fff inset}
+.high-contrast{filter:contrast(1.18)}
+.high-contrast .topbar,.high-contrast .tool-rail,.high-contrast .properties{border-color:#34483f;box-shadow:0 4px 16px #0003}
+.high-contrast .canvas-wrap{border:3px solid #172f27}
+.high-contrast .tool-button.active,.high-contrast .mode-switch button.active,.high-contrast .wall-rows>button.selected{background:#cce9dd;color:#082d22;border-color:#083e2e}
+.high-contrast .section-label,.high-contrast .property-field>span{color:#34443e}.high-contrast button{border-color:#718079}.high-contrast .canvas-contrast{background:#082d22;color:#fff}
+
+@media(max-width:760px){
+  .workspace,.workspace.left-collapsed,.workspace.right-collapsed,.workspace.left-collapsed.right-collapsed{grid-template-columns:72px minmax(0,1fr);grid-template-rows:minmax(260px,1fr) minmax(210px,36vh)}
+  .left-panel{grid-column:1;grid-row:1}.canvas-wrap{grid-column:2;grid-row:1}.right-panel{grid-column:1/-1;grid-row:2}
+  .right-panel>.properties{display:flex;border-radius:11px}.right-collapsed .right-panel{height:44px;align-self:end}.right-collapsed .right-panel>.properties{visibility:hidden}
+  .panel-collapse.right{left:auto;right:4px;top:-48px}.right-collapsed .panel-collapse.right{left:auto;right:4px;top:0}.panel-collapse.left{right:-4px}
+  .left-collapsed .left-panel{width:44px}.left-collapsed .canvas-wrap{grid-column:1/-1}
+  .canvas-contrast{display:flex;position:absolute;right:12px;top:64px;z-index:7;min-height:44px;border:2px solid #52655d;border-radius:10px;background:#fff;align-items:center;gap:6px;padding:0 11px;font-size:11px;font-weight:800;box-shadow:0 3px 12px #0002}.canvas-contrast svg{width:18px}
+}
+@media(max-width:520px) and (orientation:portrait){.topbar{gap:4px}.mode-switch{order:3}.workspace{grid-template-columns:64px minmax(0,1fr)}.canvas-hint{display:none}.right-panel>.properties{font-size:14px}.panel-scroll{overscroll-behavior:contain}}

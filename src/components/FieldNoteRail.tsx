@@ -1,0 +1,4 @@
+import { ArrowUpRight, Compass, MousePointer2, PenLine, Ruler, StickyNote } from 'lucide-react';
+import { useSketchStore } from '../store/useSketchStore';
+const tools=[['select','Select',MousePointer2],['rough-shape','Rough shape',PenLine],['text','Text note',StickyNote],['leader','Arrow',ArrowUpRight],['measurement','Measure',Ruler],['north-arrow','North',Compass]] as const;
+export function FieldNoteRail(){const active=useSketchStore(s=>s.fieldNoteTool),set=useSketchStore(s=>s.setFieldNoteTool);return <aside className="tool-rail"><div className="rail-title"><StickyNote size={18}/><span>Field</span></div><div className="tool-list">{tools.map(([id,label,Icon])=><button key={id} className={`tool-button ${active===id?'active':''}`} onClick={()=>set(id)}><Icon size={21}/><span>{label}</span></button>)}</div></aside>}

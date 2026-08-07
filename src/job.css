@@ -1,0 +1,1 @@
+.job-modal{max-height:calc(100vh - 40px);display:flex;flex-direction:column}.job-grid{overflow-y:auto}.optional-hint{font-size:9px;color:#7c8984;margin-right:auto;align-self:center}@media(max-width:600px){.optional-hint{display:none}.job-grid{grid-template-columns:1fr}.job-grid .wide{grid-column:auto}}
