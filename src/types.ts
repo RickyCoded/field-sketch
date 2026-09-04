@@ -75,6 +75,7 @@ export interface OffsetMeasurement {
   id:string;firstFeature:OffsetFeatureReference;secondFeature:OffsetFeatureReference;measuredValue:number;calculatedValue?:number;
   label:string;firstAnchor:Point;secondAnchor:Point;labelAnchor:Point;orientation:'horizontal'|'vertical'|'aligned';labelSide:'left'|'right';
   leaderLines:boolean;extensionLines:boolean;verified:boolean;notes:string;createdAt:string;updatedAt:string;
+  applicationMode?:'record-only'|'applied';movedObjectId?:string;originalPosition?:Point;adjustedPosition?:Point;originalCalculatedValue?:number;adjustmentDirection?:Point;
 }
 export interface OffsetSession {step:'first'|'second'|'location'|'details';firstFeature?:OffsetFeatureReference;secondFeature?:OffsetFeatureReference;labelAnchor?:Point}
 export interface JogInput {firstLength:number;turn:TurnDirection;connectingLength:number;returnTurn:TurnDirection;finalLength?:number}
