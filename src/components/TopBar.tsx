@@ -1,4 +1,4 @@
-import { ClipboardList, ClipboardPen, Contrast, Download, FileDown, FilePlus2, FolderOpen, Grid3X3, Info, PencilRuler, Redo2, Save, Undo2, ZoomIn } from 'lucide-react';
+import { ClipboardList, Contrast, Download, FileDown, FilePlus2, FolderOpen, Grid3X3, Info, Redo2, Save, Undo2, ZoomIn } from 'lucide-react';
 import { useRef } from 'react';
 import { useSketchStore } from '../store/useSketchStore';
 import type { ProjectFile } from '../types';
@@ -16,7 +16,7 @@ export function TopBar({ onExport, onFit, onJob, highContrast, onContrast }: Pro
   ];
   return <header className="topbar">
     <div className="brand"><div className="brand-mark"><LandIcon/></div><div><strong>ILR Sketch</strong><span>Field workspace</span></div></div>
-    <div className="mode-switch" aria-label="Workspace mode"><button className={s.mode === 'sketch' ? 'active' : ''} onClick={() => s.setMode('sketch')}><PencilRuler size={16}/>Sketch</button><button className={s.mode === 'measure' ? 'active' : ''} onClick={() => s.setMode('measure')}><span className="measure-mark">↔</span>Measure</button><button className={s.mode === 'field-note' ? 'active' : ''} onClick={() => s.setMode('field-note')}><ClipboardPen size={16}/>Notes</button></div>
+    <div className="workspace-title"><strong>Sketch workspace</strong><span>Drawing and measured capture in one canvas</span></div>
     <div className="top-actions primary-actions">{actions.map(({ label, icon: Icon, fn }) => <button key={label} onClick={fn}><Icon size={18}/><span>{label}</span></button>)}</div>
     <div className="top-actions">
       <button title="Export PNG" onClick={() => onExport('png')}><Download size={18}/><span>PNG</span></button>

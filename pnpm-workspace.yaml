@@ -1,2 +1,3 @@
 allowBuilds:
-  core-js: set this to true or false
+  # Core-js is used as a runtime dependency only; its optional postinstall is not required.
+  core-js: false
