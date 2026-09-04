@@ -9,13 +9,13 @@ const saveBlob = (data: Blob, filename: string) => { const a = document.createEl
 export function TopBar({ onExport, onFit, onJob, highContrast, onContrast }: Props) {
   const input = useRef<HTMLInputElement>(null); const s = useSketchStore();
   const save = () => saveBlob(new Blob([JSON.stringify(s.serialize(), null, 2)], { type: 'application/json' }), `${(s.job.jobName || 'field-sketch').replace(/\W+/g, '-').toLowerCase()}.fieldsketch.json`);
-  const open = async (file?: File) => { if (!file) return; try { s.loadProject(JSON.parse(await file.text()) as ProjectFile); } catch { alert('This file is not a valid FieldSketch project.'); } };
+  const open = async (file?: File) => { if (!file) return; try { s.loadProject(JSON.parse(await file.text()) as ProjectFile); } catch { alert('This file is not a valid ILR Sketch project.'); } };
   const actions = [
     { label: 'New Job', icon: FilePlus2, fn: () => { if (!s.objects.length || confirm('Start a new job? Unsaved changes will be lost.')) s.newProject(); } },
     { label: 'Open Job', icon: FolderOpen, fn: () => input.current?.click() }, { label: 'Save Job', icon: Save, fn: save },
   ];
   return <header className="topbar">
-    <div className="brand"><div className="brand-mark"><LandIcon/></div><div><strong>FieldSketch</strong><span>ILR workspace</span></div></div>
+    <div className="brand"><div className="brand-mark"><LandIcon/></div><div><strong>ILR Sketch</strong><span>Field workspace</span></div></div>
     <div className="mode-switch" aria-label="Workspace mode"><button className={s.mode === 'sketch' ? 'active' : ''} onClick={() => s.setMode('sketch')}><PencilRuler size={16}/>Sketch</button><button className={s.mode === 'measure' ? 'active' : ''} onClick={() => s.setMode('measure')}><span className="measure-mark">↔</span>Measure</button><button className={s.mode === 'field-note' ? 'active' : ''} onClick={() => s.setMode('field-note')}><ClipboardPen size={16}/>Notes</button></div>
     <div className="top-actions primary-actions">{actions.map(({ label, icon: Icon, fn }) => <button key={label} onClick={fn}><Icon size={18}/><span>{label}</span></button>)}</div>
     <div className="top-actions">

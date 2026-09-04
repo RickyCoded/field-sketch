@@ -33,7 +33,7 @@ export function saveFieldDataSummaryPdf(data: FieldSummaryData, filename: string
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(18);
     pdf.setTextColor('#173b32');
-    pdf.text('FieldSketch — Field Data Summary', margin, y);
+    pdf.text('ILR Sketch — Field Data Summary', margin, y);
     y += 20;
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(8);
@@ -215,7 +215,7 @@ export function saveFieldDataSummaryPdf(data: FieldSummaryData, filename: string
     pdf.setPage(page);
     pdf.setFontSize(8);
     pdf.setTextColor('#7a8782');
-    pdf.text(`FieldSketch · Page ${page} of ${pageCount}`, 570, 768, { align: 'right' });
+    pdf.text(`ILR Sketch · Page ${page} of ${pageCount}`, 570, 768, { align: 'right' });
   }
   pdf.save(filename);
 }

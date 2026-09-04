@@ -1,4 +1,4 @@
-# FieldSketch Version 2 acceptance record
+# ILR Sketch Version 2 acceptance record
 
 Version 2 is accepted as a structured field-capture and drafting-handoff application. Measurement data remains the source of truth; canvas geometry is reconstructed from it.
 

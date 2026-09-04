@@ -1,4 +1,4 @@
-# FieldSketch Version 2 scope
+# ILR Sketch Version 2 scope
 
 ## Product boundary
 

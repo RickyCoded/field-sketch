@@ -1,6 +1,6 @@
-# FieldSketch
+# ILR Sketch
 
-FieldSketch is a lightweight field-sketching and structured measurement application for Improvement Location Report workflows. It is designed for preliminary field capture and drafting handoff—not as surveying or CAD software.
+ILR Sketch is a lightweight field-sketching and structured measurement application for Improvement Location Report workflows. It is designed for preliminary field capture and drafting handoff—not as surveying or CAD software.
 
 ## Development
 
