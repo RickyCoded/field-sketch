@@ -50,7 +50,14 @@ export interface ClosureDecision extends ClosureResult {
 export interface MeasuredFeatureV3 {
   id:string;kind:FeatureKind;name:string;geometry:'open-path'|'closed-area';startAnchor:FeatureAnchor;
   startDirection?:FeatureStartDirection;segments:LineInstruction[];endAnchor?:FeatureAnchor;sharedEdge?:SharedEdgeReference;
-  referenceClosure?:ReferenceClosure;closure?:ClosureDecision;houseAlignment?:HouseAlignment;styleId:string;notes:string;visible:boolean;
+  referenceClosure?:ReferenceClosure;closure?:ClosureDecision;houseAlignment?:HouseAlignment;semantics:FeatureSemantics;styleId:string;notes:string;visible:boolean;
+}
+
+export type FenceTypeV3='iron'|'metal'|'stucco'|'wood'|'chain-link'|'privacy'|'masonry'|'other';
+export type SurfaceMaterialV3='concrete'|'asphalt'|'gravel'|'wood'|'unknown';
+export interface FeatureSemantics {
+  label:string;labelVisible:boolean;covered:boolean;enclosed:boolean;
+  fenceType?:FenceTypeV3;material?:SurfaceMaterialV3;height?:Feet;
 }
 
 export type FeatureStartDirection=

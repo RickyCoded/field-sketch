@@ -1,5 +1,6 @@
 import { add, degreesToRadians, perpendicularOffset } from './geometry';
 import type { CurbTieV3, MeasuredFeatureV3, OrientedLine, PointFt, ProjectV3, RoadReferenceV3 } from './types';
+import { defaultSemantics, styleForKind } from './featureStyles';
 
 const id=()=>crypto.randomUUID();
 const updated=(project:ProjectV3):ProjectV3=>({...project,updatedAt:new Date().toISOString()});
@@ -30,7 +31,7 @@ export function establishCornerA(project:ProjectV3,input:CornerATieInput):{proje
   if(!Number.isFinite(input.distance)||input.distance<=0)throw new Error('Corner A curb tie must be greater than zero.');
   const houseId=id(),tieId=id(),curbs=derivePrimaryCurbLines(road),cornerA=perpendicularOffset(curbs.houseSide,input.station,input.distance);
   const tie:CurbTieV3={id:tieId,curbSide:'house-side',target:{featureId:houseId,pointRole:'start'},station:input.station,perpendicularDistance:input.distance,enteredText:input.enteredText,verified:input.verified??false};
-  const house:MeasuredFeatureV3={id:houseId,kind:'house',name:input.houseName?.trim()||'Residence',geometry:'closed-area',startAnchor:{type:'curb-tie',roadId:road.id,tieId},segments:[],houseAlignment:{phase:'front-walk',primaryRoadId:road.id,cornerATieId:tieId,provisionalInitialAngle:road.baseline.angle+(input.frontDirection==='against-road'?180:0),frontSegmentCount:0,alignmentRotation:0},styleId:'structure',notes:'',visible:true};
+  const houseName=input.houseName?.trim()||'Residence',house:MeasuredFeatureV3={id:houseId,kind:'house',name:houseName,geometry:'closed-area',startAnchor:{type:'curb-tie',roadId:road.id,tieId},segments:[],houseAlignment:{phase:'front-walk',primaryRoadId:road.id,cornerATieId:tieId,provisionalInitialAngle:road.baseline.angle+(input.frontDirection==='against-road'?180:0),frontSegmentCount:0,alignmentRotation:0},semantics:defaultSemantics('house',houseName),styleId:styleForKind('house').id,notes:'',visible:true};
   const roads=project.roads.map(item=>item.id===road.id?{...item,ties:[...item.ties,tie]}:item),next=updated({...project,roads,features:[...project.features,house],dependencyOrder:[...project.dependencyOrder,houseId]});
   return{project:next,cornerA,houseId,tieId};
 }

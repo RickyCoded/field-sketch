@@ -2,6 +2,7 @@ import { CLOSURE_TOLERANCE_FT, add, distance, dot, normalizeAngle, radiansToDegr
 import { resolveHousePath } from './houseWorkflow';
 import { resolveCurbTiePoint } from './roadWorkflow';
 import type { DerivedLine, DerivedPath, FeatureAnchor, FeatureKind, FeatureStartDirection, LineDirection, LineInstruction, MeasuredFeatureV3, PointFt, ProjectV3, ReferenceClosure } from './types';
+import { defaultGeometry, defaultSemantics, styleForFeature, styleForKind, validateFeatureSemantics } from './featureStyles';
 
 const EPSILON=.000001,id=()=>crypto.randomUUID(),now=()=>new Date().toISOString();
 const warningId=(featureId:string)=>`feature-reference-${featureId}`;
@@ -36,13 +37,13 @@ function resolveStartAngle(project:ProjectV3,direction:FeatureStartDirection|und
 }
 
 export interface ReferencedFeatureInput {
-  kind:FeatureKind;name:string;geometry:'open-path'|'closed-area';sourceFeatureId:string;sourceSegmentId:string;
+  kind:FeatureKind;name:string;geometry?:'open-path'|'closed-area';sourceFeatureId:string;sourceSegmentId:string;
   measuredFrom:'start'|'end';distanceAlong:number;initialDirection:'along'|'opposite'|'perpendicular-left'|'perpendicular-right';notes?:string;
 }
 
 export function createFeatureFromReference(project:ProjectV3,input:ReferencedFeatureInput):{project:ProjectV3;featureId:string;startPoint:PointFt}{
   const sourceLine=resolveFeatureSegment(project,input.sourceFeatureId,input.sourceSegmentId),length=distance(sourceLine.start,sourceLine.end);if(!Number.isFinite(input.distanceAlong)||input.distanceAlong<0||input.distanceAlong>length+EPSILON)throw new Error('The reference distance must lie on the selected segment.');
-  const featureId=id(),startAnchor:FeatureAnchor={type:'station-on-segment',featureId:input.sourceFeatureId,segmentId:input.sourceSegmentId,measuredFrom:input.measuredFrom,distance:input.distanceAlong},startDirection:FeatureStartDirection={type:'relative-to-segment',featureId:input.sourceFeatureId,segmentId:input.sourceSegmentId,relation:input.initialDirection},created:MeasuredFeatureV3={id:featureId,kind:input.kind,name:input.name.trim()||defaultName(input.kind),geometry:input.geometry,startAnchor,startDirection,segments:[],styleId:input.kind,notes:input.notes??'',visible:true},timestamp=now();
+  const featureId=id(),name=input.name.trim()||defaultName(input.kind),startAnchor:FeatureAnchor={type:'station-on-segment',featureId:input.sourceFeatureId,segmentId:input.sourceSegmentId,measuredFrom:input.measuredFrom,distance:input.distanceAlong},startDirection:FeatureStartDirection={type:'relative-to-segment',featureId:input.sourceFeatureId,segmentId:input.sourceSegmentId,relation:input.initialDirection},created:MeasuredFeatureV3={id:featureId,kind:input.kind,name,geometry:input.geometry??defaultGeometry(input.kind),startAnchor,startDirection,segments:[],semantics:defaultSemantics(input.kind,name),styleId:styleForKind(input.kind).id,notes:input.notes??'',visible:true},timestamp=now(),semanticErrors=validateFeatureSemantics(created);if(semanticErrors.length)throw new Error(semanticErrors.join(' '));
   const next={...project,features:[...project.features,created],dependencyOrder:[...project.dependencyOrder,featureId],updatedAt:timestamp};return{project:next,featureId,startPoint:resolveFeatureAnchor(next,startAnchor)};
 }
 
@@ -70,6 +71,10 @@ export function reviewFeatureDependencies(project:ProjectV3):ProjectV3{
   const retained=project.warnings.filter(item=>item.code!=='broken-feature-reference'&&item.code!=='dependency-cycle'),generated:ProjectV3['warnings']=[];
   for(const target of project.features){try{resolveFeaturePath(project,target.id)}catch(error){const message=error instanceof Error?error.message:'Feature reference cannot be resolved.',cycle=/cycle/i.test(message);generated.push({id:`dependency-${target.id}`,level:'error',code:cycle?'dependency-cycle':'broken-feature-reference',message,featureId:target.id})}}
   return{...project,warnings:[...retained,...generated],updatedAt:now()};
+}
+
+export function updateFeatureSemantics(project:ProjectV3,featureId:string,patch:Partial<MeasuredFeatureV3['semantics']>):ProjectV3{
+  const target=feature(project,featureId),automaticFenceLabel=target.kind==='fence'&&patch.fenceType&&patch.label===undefined?`${patch.fenceType.replaceAll('-',' ').toUpperCase()} FENCE`:undefined,semantics={...target.semantics,...patch,...(automaticFenceLabel?{label:automaticFenceLabel}:{})},candidate={...target,semantics},errors=validateFeatureSemantics(candidate);if(errors.length)throw new Error(errors.join(' '));return{...project,features:project.features.map(item=>item.id===featureId?{...item,semantics,styleId:styleForFeature(candidate).id}:item),updatedAt:now()};
 }
 
 function defaultName(kind:FeatureKind){return kind.split('-').map(word=>word[0].toUpperCase()+word.slice(1)).join(' ')}
