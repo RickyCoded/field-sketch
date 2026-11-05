@@ -8,7 +8,7 @@ const updated=(project:ProjectV3):ProjectV3=>({...project,updatedAt:new Date().t
 export interface PrimaryRoadInput {name?:string;width:number;origin:PointFt;angle:number;visibleLength:number;houseSide:'left'|'right';notes?:string}
 
 export function derivePrimaryCurbLines(road:RoadReferenceV3):{houseSide:OrientedLine;opposite:OrientedLine}{
-  const radians=degreesToRadians(road.baseline.angle),direction={x:Math.cos(radians),y:Math.sin(radians)},left={x:direction.y,y:-direction.x},right={x:-direction.y,y:direction.x},normal=road.baseline.houseSide==='left'?left:right;
+  const radians=degreesToRadians(road.baseline.angle),direction={x:Math.cos(radians),y:Math.sin(radians)},left={x:direction.y,y:-direction.x},right={x:-direction.y,y:direction.x},normal=road.baseline.houseNormal??(road.baseline.houseSide==='left'?left:right);
   const houseSide={origin:{...road.baseline.origin},direction,normal},opposite={origin:add(road.baseline.origin,{x:-normal.x*road.width,y:-normal.y*road.width}),direction,normal};
   return{houseSide,opposite};
 }

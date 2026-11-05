@@ -80,8 +80,9 @@ export interface CurbTieV3 {
 
 export interface RoadReferenceV3 {
   id:string;role:'primary'|'secondary';name?:string;width:Feet;
-  baseline:{origin:PointFt;angle:Degrees;visibleLength:Feet;houseSide:'left'|'right'};
+  baseline:{origin:PointFt;angle:Degrees;visibleLength:Feet;houseSide:'left'|'right';houseNormal?:PointFt};
   ties:CurbTieV3[];derivedFromHouseId?:string;
+  secondaryAlignment?:{firstTieId:string;secondTieId:string;selectedSolution:0|1};
   approximateCurbReturn?:{visible:boolean;visualRadius?:Feet};notes:string;
 }
 
