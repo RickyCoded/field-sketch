@@ -20,7 +20,7 @@ export function addPrimaryRoad(project:ProjectV3,input:PrimaryRoadInput):Project
   return updated({...project,roads:[...project.roads,road]});
 }
 
-export interface CornerATieInput {roadId:string;station:number;distance:number;enteredText:string;houseName?:string;verified?:boolean}
+export interface CornerATieInput {roadId:string;station:number;distance:number;enteredText:string;houseName?:string;verified?:boolean;frontDirection?:'with-road'|'against-road'}
 
 /** Creates Corner A and the house together so the house start remains linked to the curb tie. */
 export function establishCornerA(project:ProjectV3,input:CornerATieInput):{project:ProjectV3;cornerA:PointFt;houseId:string;tieId:string}{
@@ -30,7 +30,7 @@ export function establishCornerA(project:ProjectV3,input:CornerATieInput):{proje
   if(!Number.isFinite(input.distance)||input.distance<=0)throw new Error('Corner A curb tie must be greater than zero.');
   const houseId=id(),tieId=id(),curbs=derivePrimaryCurbLines(road),cornerA=perpendicularOffset(curbs.houseSide,input.station,input.distance);
   const tie:CurbTieV3={id:tieId,curbSide:'house-side',target:{featureId:houseId,pointRole:'start'},station:input.station,perpendicularDistance:input.distance,enteredText:input.enteredText,verified:input.verified??false};
-  const house:MeasuredFeatureV3={id:houseId,kind:'house',name:input.houseName?.trim()||'Residence',geometry:'closed-area',startAnchor:{type:'curb-tie',roadId:road.id,tieId},segments:[],styleId:'structure',notes:'',visible:true};
+  const house:MeasuredFeatureV3={id:houseId,kind:'house',name:input.houseName?.trim()||'Residence',geometry:'closed-area',startAnchor:{type:'curb-tie',roadId:road.id,tieId},segments:[],houseAlignment:{phase:'front-walk',primaryRoadId:road.id,cornerATieId:tieId,provisionalInitialAngle:road.baseline.angle+(input.frontDirection==='against-road'?180:0),frontSegmentCount:0,alignmentRotation:0},styleId:'structure',notes:'',visible:true};
   const roads=project.roads.map(item=>item.id===road.id?{...item,ties:[...item.ties,tie]}:item),next=updated({...project,roads,features:[...project.features,house],dependencyOrder:[...project.dependencyOrder,houseId]});
   return{project:next,cornerA,houseId,tieId};
 }

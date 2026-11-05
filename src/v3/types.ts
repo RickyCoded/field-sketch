@@ -49,7 +49,13 @@ export interface ClosureDecision extends ClosureResult {
 
 export interface MeasuredFeatureV3 {
   id:string;kind:FeatureKind;name:string;geometry:'open-path'|'closed-area';startAnchor:FeatureAnchor;
-  segments:LineInstruction[];closure?:ClosureDecision;styleId:string;notes:string;visible:boolean;
+  segments:LineInstruction[];closure?:ClosureDecision;houseAlignment?:HouseAlignment;styleId:string;notes:string;visible:boolean;
+}
+
+export interface HouseAlignment {
+  phase:'front-walk'|'perimeter';primaryRoadId:string;cornerATieId:string;
+  provisionalInitialAngle:Degrees;frontSegmentCount:number;alignmentRotation:Degrees;
+  cornerBTieId?:string;selectedSolution?:0|1;
 }
 
 export interface FeaturePointReference {featureId:string;pointRole:'start'|'end';segmentId?:string}
