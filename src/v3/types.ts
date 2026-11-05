@@ -53,7 +53,7 @@ export interface MeasuredFeatureV3 {
 }
 
 export interface HouseAlignment {
-  phase:'front-walk'|'perimeter';primaryRoadId:string;cornerATieId:string;
+  phase:'front-walk'|'perimeter'|'complete';primaryRoadId:string;cornerATieId:string;
   provisionalInitialAngle:Degrees;frontSegmentCount:number;alignmentRotation:Degrees;
   cornerBTieId?:string;selectedSolution?:0|1;
 }

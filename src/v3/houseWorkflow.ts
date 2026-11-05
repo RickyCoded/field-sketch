@@ -12,20 +12,20 @@ function houseAndAlignment(project:ProjectV3,houseId:string){const house=project
 export function resolveHousePath(project:ProjectV3,houseId:string):DerivedPath{
   const {house,alignment}=houseAndAlignment(project,houseId),startAnchor=house.startAnchor;if(startAnchor.type!=='curb-tie')throw new Error('The house start is not linked to a curb tie.');
   const start=resolveCurbTiePoint(project,startAnchor.roadId,startAnchor.tieId),initialAngle=alignment.provisionalInitialAngle+alignment.alignmentRotation;
-  return reconstructPath(start,house.segments,initialAngle);
+  const instructions=house.closure?.adjustedInstructions??house.segments;return reconstructPath(start,instructions,initialAngle);
 }
 
 export function addHouseSegment(project:ProjectV3,houseId:string,input:HouseSegmentInput):ProjectV3{
-  const {house,alignment}=houseAndAlignment(project,houseId);if(!Number.isFinite(input.length)||input.length<=0)throw new Error('Wall length must be greater than zero.');
+  const {house,alignment}=houseAndAlignment(project,houseId);if(alignment.phase==='complete')throw new Error('Reopen the completed structure before adding another wall.');if(!Number.isFinite(input.length)||input.length<=0)throw new Error('Wall length must be greater than zero.');
   if(alignment.phase==='front-walk'&&input.direction.mode==='absolute')throw new Error('Front walls use relative directions so the complete front can rotate from the second curb tie.');
   const timestamp=now(),segment:LineInstruction={id:id(),sequence:house.segments.length+1,length:input.length,direction:input.direction,enteredText:input.enteredText,note:input.note,verified:input.verified??false,createdAt:timestamp,updatedAt:timestamp};
-  const features=project.features.map(feature=>feature.id===house.id?{...feature,segments:[...feature.segments,segment],houseAlignment:{...alignment,...(alignment.phase==='front-walk'?{frontSegmentCount:alignment.frontSegmentCount+1}:{})}}:feature);
+  const features=project.features.map(feature=>feature.id===house.id?{...feature,segments:[...feature.segments,segment],closure:undefined,houseAlignment:{...alignment,...(alignment.phase==='front-walk'?{frontSegmentCount:alignment.frontSegmentCount+1}:{})}}:feature);
   return{...project,features,updatedAt:timestamp};
 }
 
 export function removeLastHouseSegment(project:ProjectV3,houseId:string):ProjectV3{
-  const {house,alignment}=houseAndAlignment(project,houseId);if(!house.segments.length)return project;
-  const features=project.features.map(feature=>feature.id===house.id?{...feature,segments:feature.segments.slice(0,-1),houseAlignment:{...alignment,...(alignment.phase==='front-walk'?{frontSegmentCount:Math.max(0,alignment.frontSegmentCount-1)}:{})}}:feature);
+  const {house,alignment}=houseAndAlignment(project,houseId);if(alignment.phase==='complete')throw new Error('Reopen the completed structure before removing a wall.');if(!house.segments.length)return project;
+  const features=project.features.map(feature=>feature.id===house.id?{...feature,segments:feature.segments.slice(0,-1),closure:undefined,houseAlignment:{...alignment,...(alignment.phase==='front-walk'?{frontSegmentCount:Math.max(0,alignment.frontSegmentCount-1)}:{})}}:feature);
   return{...project,features,updatedAt:now()};
 }
 

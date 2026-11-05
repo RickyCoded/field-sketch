@@ -67,6 +67,6 @@ export function solveSecondaryRoad(point1:PointFt,point2:PointFt,offset1:Feet,of
 
 export function calculateClosure(points:PointFt[],zeroTolerance=.005):ClosureResult{
   if(points.length<2)return{horizontalError:0,verticalError:0,directError:0,status:'closed'};
-  const start=points[0],end=points.at(-1)!,horizontalError=end.x-start.x,verticalError=end.y-start.y,directError=Math.hypot(horizontalError,verticalError),status=directError<=zeroTolerance?'closed':directError<=CLOSURE_TOLERANCE_FT?'within-field-tolerance':'outside-field-tolerance';
+  const start=points[0],end=points.at(-1)!,horizontalError=end.x-start.x,verticalError=end.y-start.y,directError=Math.hypot(horizontalError,verticalError),status=directError<=zeroTolerance+EPSILON?'closed':directError<=CLOSURE_TOLERANCE_FT+EPSILON?'within-field-tolerance':'outside-field-tolerance';
   return{horizontalError,verticalError,directError,status};
 }
