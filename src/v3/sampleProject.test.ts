@@ -1,0 +1,4 @@
+import { describe,expect,it } from 'vitest';
+import { createFictionalSampleProject } from './sampleProject';
+import { parseProjectV3, serializeProjectV3 } from './project';
+describe('fictional sample project',()=>{it('demonstrates the complete corner-lot field workflow and reopens losslessly',()=>{const project=createFictionalSampleProject(),house=project.features.find(item=>item.kind==='house')!;expect(project.roads).toHaveLength(2);expect(house.segments.length).toBeGreaterThan(7);expect(house.houseAlignment?.phase).toBe('complete');expect(project.features.some(item=>item.kind==='porch')).toBe(true);expect(project.features.some(item=>item.kind==='concrete')).toBe(true);expect(project.features.some(item=>item.kind==='fence'&&item.semantics.fenceType==='iron')).toBe(true);expect(parseProjectV3(serializeProjectV3(project))).toEqual(project)})});

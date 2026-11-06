@@ -4,7 +4,7 @@ const id=()=>crypto.randomUUID();
 
 export function createProjectV3(jobName='Untitled ILR sketch',now=new Date().toISOString()):ProjectV3{
   const projectId=`ILR-${now.slice(0,10).replaceAll('-','')}-${id().slice(0,8).toUpperCase()}`;
-  return{version:3,projectId,job:{jobName,projectId},units:'decimal-feet',displayPrecision:'tenth',grid:{visible:true,minorSpacing:1,snapEnabled:true},roads:[],features:[],dependencyOrder:[],warnings:[],viewport:{center:{x:0,y:0},pixelsPerFoot:8},notes:[],createdAt:now,updatedAt:now};
+  return{version:3,projectId,job:{jobName,projectId},units:'decimal-feet',displayPrecision:'tenth',grid:{visible:true,minorSpacing:1,snapEnabled:true},roads:[],features:[],dependencyOrder:[],warnings:[],viewport:{center:{x:0,y:0},pixelsPerFoot:8},notes:[],legacyReferences:[],createdAt:now,updatedAt:now};
 }
 
 export function validateProjectV3(value:unknown):string[]{

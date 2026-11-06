@@ -89,10 +89,12 @@ export interface RoadReferenceV3 {
 export interface JobInformationV3 {jobName:string;projectId:string;address?:string;client?:string;fieldWorker?:string;inspectionDate?:string;notes?:string}
 export interface ProjectWarningV3 {id:string;level:'information'|'review'|'error';code:string;message:string;featureId?:string;roadId?:string;accepted?:boolean}
 export interface ProjectNoteV3 {id:string;text:string;createdAt:string}
+export interface LegacyReferenceV3 {id:string;name:string;sourceType:string;points:PointFt[];closed:boolean;locked:true;notes:string}
 
 export interface ProjectV3 {
   version:3;projectId:string;job:JobInformationV3;units:'decimal-feet';displayPrecision:'tenth';
   grid:{visible:boolean;minorSpacing:Feet;snapEnabled:boolean};roads:RoadReferenceV3[];features:MeasuredFeatureV3[];
   dependencyOrder:string[];warnings:ProjectWarningV3[];viewport:{center:PointFt;pixelsPerFoot:number};notes:ProjectNoteV3[];
+  legacyReferences?:LegacyReferenceV3[];
   createdAt:string;updatedAt:string;
 }

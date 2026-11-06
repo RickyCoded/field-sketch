@@ -1,0 +1,25 @@
+import { migrateProject } from '../lib/projectMigration';
+import { calculateSitePath } from '../lib/siteGeometry';
+import type { ProjectFile, ProjectFileV2 } from '../types';
+import { defaultSemantics, styleForKind } from './featureStyles';
+import { createProjectV3, parseProjectV3 } from './project';
+import type { LegacyReferenceV3, LineInstruction, MeasuredFeatureV3, PointFt, ProjectV3, RoadReferenceV3 } from './types';
+
+const SCALE=.125,point=(value:{x:number;y:number}):PointFt=>({x:value.x*SCALE,y:value.y*SCALE}),now=()=>new Date().toISOString(),id=()=>crypto.randomUUID();
+
+/** Imports into a new V3 document. The caller's original JSON is never rewritten. */
+export function importProjectToV3(json:string):ProjectV3{
+  const raw=JSON.parse(json) as {version?:number};if(raw.version===3)return parseProjectV3(json);if(raw.version!==1&&raw.version!==2)throw new Error('Only Version 1, Version 2, or Version 3 project files can be opened.');
+  const legacy=migrateProject(raw as ProjectFile),timestamp=now(),project=createProjectV3(legacy.job.jobName||'Imported ILR sketch',timestamp);project.job={...project.job,address:legacy.job.address,client:legacy.job.client,fieldWorker:legacy.job.fieldWorker,inspectionDate:legacy.job.inspectionDate||legacy.job.date,notes:legacy.job.notes};
+  project.roads=importRoads(legacy);project.features=legacy.measuredEntities.map(entity=>importStructure(entity,timestamp));project.dependencyOrder=project.features.map(feature=>feature.id);project.legacyReferences=collectReferences(legacy);project.viewport={center:{x:0,y:0},pixelsPerFoot:8};
+  const unsupported=project.legacyReferences.length+(legacy.offsets?.length??0)+(legacy.measurementRecords?.length??0);project.warnings.push({id:'legacy-import',level:'review',code:'legacy-import',message:`Imported from Version ${raw.version} as a new Version 3 project. ${project.features.length} measured structures were preserved; ${unsupported} unsupported items were retained as locked references or review records.`});
+  if(legacy.lots.length)project.warnings.push({id:'legacy-lot-excluded',level:'information',code:'legacy-lot-excluded',message:'Legacy lot geometry is shown only as locked reference geometry because property lines are outside Version 3 Phase 1.'});
+  return project;
+}
+
+function importStructure(entity:ProjectFileV2['measuredEntities'][number],timestamp:string):MeasuredFeatureV3{
+  const segments:LineInstruction[]=entity.segments.map((segment,index)=>({id:segment.id||id(),sequence:index+1,length:segment.length,direction:segment.directionMode==='absolute'?{mode:'absolute',angle:segment.angle??0}:{mode:'relative',turn:segment.turn??'right',angle:segment.turnAngle??90},enteredText:segment.measurementText||String(segment.length),note:segment.notes,verified:segment.verified,createdAt:segment.createdAt||timestamp,updatedAt:segment.updatedAt||timestamp})),name=entity.name||'Imported structure';
+  return{id:entity.id||id(),kind:'other-building',name,geometry:'closed-area',startAnchor:{type:'free',point:point(entity.startPoint)},startDirection:{type:'absolute',angle:0},segments,semantics:defaultSemantics('other-building',name),styleId:styleForKind('other-building').id,notes:'Imported from a legacy project. Review positioning before field use.',visible:true};
+}
+function importRoads(legacy:ProjectFileV2):RoadReferenceV3[]{return(legacy.roads??[]).slice(0,2).map((road,index)=>({id:road.id||id(),role:index===0?'primary':'secondary',name:road.streetName,width:road.measuredWidth,baseline:{origin:point(road.curbA.start),angle:road.roadAngle,visibleLength:road.referenceLength,houseSide:'right'},ties:[],approximateCurbReturn:index===1?{visible:false}:undefined,notes:`Imported legacy road. ${road.notes}`.trim()}))}
+function collectReferences(legacy:ProjectFileV2):LegacyReferenceV3[]{const refs:LegacyReferenceV3[]=[];for(const object of legacy.objects){const p=point({x:object.x,y:object.y}),w=object.width*SCALE,h=object.height*SCALE;refs.push({id:`legacy-${object.id}`,name:object.name,sourceType:`sketch-${object.type}`,points:[p,{x:p.x+w,y:p.y},{x:p.x+w,y:p.y+h},{x:p.x,y:p.y+h}],closed:true,locked:true,notes:'Locked legacy sketch object; dimensions were graphical rather than structured measurements.'})}for(const lot of legacy.lots)refs.push({id:`legacy-${lot.id}`,name:lot.name,sourceType:'lot',points:lot.vertices.map(point),closed:true,locked:true,notes:'Reference only; property lines are excluded from this phase.'});for(const surface of legacy.surfaces){const points=surface.vertices.length?surface.vertices.map(point):calculateSitePath(surface.startPoint,surface.segments).points.map(point);refs.push({id:`legacy-${surface.id}`,name:surface.name,sourceType:`surface-${surface.type}`,points,closed:surface.geometryMode!=='polyline-width',locked:true,notes:'Locked legacy surface reference.'})}for(const fence of legacy.fences)refs.push({id:`legacy-${fence.id}`,name:fence.name,sourceType:`fence-${fence.type}`,points:calculateSitePath(fence.startPoint,fence.segments).points.map(point),closed:fence.closed,locked:true,notes:'Locked legacy fence reference.'});return refs}

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { acceptCornerBAlignment, addHouseSegment, previewCornerBAlignment, removeLastHouseSegment } from '../v3/houseWorkflow';
-import { createProjectV3, parseProjectV3 } from '../v3/project';
+import { createProjectV3 } from '../v3/project';
+import { importProjectToV3 } from '../v3/legacyImport';
 import { addPrimaryRoad, establishCornerA } from '../v3/roadWorkflow';
 import { beginHouseClosureReview, completeClosedHouse, confirmHouseRemeasured, reopenHouse, resolveHouseClosure, type ClosureResolution } from '../v3/closureWorkflow';
 import { addFeatureSegment, closeFeatureUsingReference, createFeatureFromReference, removeLastFeatureSegment, reviewReturnToReference, updateFeatureSemantics, type ReturnToReferenceReview } from '../v3/featureWorkflow';
@@ -8,6 +9,7 @@ import type { FeatureKind, FenceTypeV3, JobInformationV3, LineDirection, Project
 import { previewMeasurementEdit, updateSegmentMeasurement } from '../v3/measurementEditing';
 import { addSecondaryRoad, previewSecondaryRoad, type SecondaryRoadInput, type SecondaryRoadPreview } from '../v3/secondaryRoadWorkflow';
 import type { FeaturePointReference } from '../v3/types';
+import { createFictionalSampleProject } from '../v3/sampleProject';
 
 type RoadDraft={name:string;width:string;angle:string;visibleLength:string;houseSide:'left'|'right'};
 type CornerDraft={station:string;distance:string;frontDirection:'with-road'|'against-road'};
@@ -28,6 +30,7 @@ interface V3State{
   setEditLength:(value:string)=>void;previewEdit:()=>void;applyEdit:()=>void;cancelEdit:()=>void;undo:()=>void;redo:()=>void;
   beginSecondaryRoad:()=>void;cancelSecondaryRoad:()=>void;setSecondaryRoadDraft:(patch:Partial<SecondaryRoadDraft>)=>void;selectSecondaryCorner:(reference:FeaturePointReference)=>void;previewSecondary:()=>void;setSecondarySolution:(value:0|1)=>void;acceptSecondary:()=>void;
   updateJob:(patch:Partial<JobInformationV3>)=>void;
+  loadSample:()=>void;
   newProject:()=>void;openProject:(json:string)=>void;setViewport:(center:{x:number;y:number},pixelsPerFoot:number)=>void;toggleGrid:()=>void;clearError:()=>void;
 }
 
@@ -67,8 +70,9 @@ export const useV3Store=create<V3State>((set,get)=>({
   beginSecondaryRoad:()=>set({workspaceMode:'secondary-road',secondaryCorners:[],secondaryPreview:null,secondarySolution:0,selectedReference:null,error:null}),cancelSecondaryRoad:()=>set({workspaceMode:'improvements',secondaryCorners:[],secondaryPreview:null,error:null}),setSecondaryRoadDraft:patch=>set(state=>({secondaryRoadDraft:{...state.secondaryRoadDraft,...patch},secondaryPreview:null,error:null})),selectSecondaryCorner:reference=>set(state=>{const duplicate=state.secondaryCorners.some(item=>item.featureId===reference.featureId&&item.segmentId===reference.segmentId&&item.pointRole===reference.pointRole);if(duplicate)return{error:'Choose a different second house corner.'};const corners=state.secondaryCorners.length>=2?[reference]:[...state.secondaryCorners,reference];return{secondaryCorners:corners,secondaryPreview:null,error:null}}),
   previewSecondary:()=>attempt(set,()=>{const state=get();if(state.secondaryCorners.length!==2)throw new Error('Select two different house corners on the canvas.');const input=secondaryInput(state);return{secondaryPreview:previewSecondaryRoad(state.project,input),secondarySolution:0}}),setSecondarySolution:secondarySolution=>set({secondarySolution}),acceptSecondary:()=>attempt(set,()=>{const state=get();if(!state.secondaryPreview)throw new Error('Preview the secondary road before accepting it.');const added=addSecondaryRoad(state.project,secondaryInput(state),state.secondarySolution);return{project:added.project,workspaceMode:'improvements',secondaryCorners:[],secondaryPreview:null}}),
   updateJob:patch=>set(state=>({project:changed({...state.project,job:{...state.project.job,...patch}})})),
+  loadSample:()=>set({project:createFictionalSampleProject(),past:[],future:[],workspaceMode:'improvements',selectedReference:null,activeFeatureId:null,featureReturnReview:null,error:null}),
   newProject:()=>set({project:createProjectV3(),roadDraft:roadDraft(),cornerDraft:cornerDraft(),wallDraft:wallDraft(),cornerBDistance:'20.0',featureDraft:featureDraft(),featureWallDraft:wallDraft(),alignmentPreview:null,closureNote:'',selectedReference:null,activeFeatureId:null,featureReturnReview:null,featureRemeasured:false,featureNote:'',workspaceMode:'improvements',secondaryRoadDraft:secondaryRoadDraft(),secondaryCorners:[],secondaryPreview:null,error:null}),
-  openProject:json=>attempt(set,()=>({project:parseProjectV3(json),alignmentPreview:null,selectedReference:null,activeFeatureId:null,featureReturnReview:null})),
+  openProject:json=>attempt(set,()=>({project:importProjectToV3(json),alignmentPreview:null,selectedReference:null,activeFeatureId:null,featureReturnReview:null})),
   setViewport:(center,pixelsPerFoot)=>{suppressHistory=true;set(state=>({project:changed({...state.project,viewport:{center,pixelsPerFoot}})}));suppressHistory=false},toggleGrid:()=>set(state=>({project:changed({...state.project,grid:{...state.project.grid,visible:!state.project.grid.visible}})})),
 }));
 
