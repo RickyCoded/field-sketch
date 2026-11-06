@@ -1,0 +1,15 @@
+import { describe,expect,it } from 'vitest';
+import { acceptCornerBAlignment, addHouseSegment } from './houseWorkflow';
+import { addFeatureSegment, createFeatureFromReference, resolveFeaturePath } from './featureWorkflow';
+import { previewMeasurementEdit, updateSegmentMeasurement } from './measurementEditing';
+import { createProjectV3 } from './project';
+import { addPrimaryRoad, establishCornerA } from './roadWorkflow';
+
+const straight=(length:number)=>({length,enteredText:String(length),direction:{mode:'relative' as const,turn:'straight' as const,angle:0}}),right=(length:number)=>({length,enteredText:String(length),direction:{mode:'relative' as const,turn:'right' as const,angle:90}});
+function projectWithPorch(){let project=createProjectV3();project=addPrimaryRoad(project,{width:36,origin:{x:0,y:0},angle:0,visibleLength:150,houseSide:'right'});const placed=establishCornerA(project,{roadId:project.roads[0].id,station:20,distance:20,enteredText:'20'});project=addHouseSegment(placed.project,placed.houseId,straight(40));project=acceptCornerBAlignment(project,placed.houseId,{distance:20,enteredText:'20'},0);project=addHouseSegment(project,placed.houseId,right(20));project=addHouseSegment(project,placed.houseId,right(40));project=addHouseSegment(project,placed.houseId,right(20));const sourceSegmentId=project.features[0].segments[0].id,created=createFeatureFromReference(project,{kind:'porch',name:'Porch',sourceFeatureId:placed.houseId,sourceSegmentId,measuredFrom:'start',distanceAlong:5,initialDirection:'perpendicular-left'});project=addFeatureSegment(created.project,created.featureId,straight(5));return{project,houseId:placed.houseId,sourceSegmentId,porchId:created.featureId}}
+
+describe('dependency-aware measurement editing',()=>{
+  it('previews all directly affected features',()=>{const data=projectWithPorch();expect(previewMeasurementEdit(data.project,data.houseId,data.sourceSegmentId).affectedFeatureIds).toContain(data.porchId)});
+  it('updates the instruction and rebuilds an attached feature from its relationship',()=>{const data=projectWithPorch(),before=resolveFeaturePath(data.project,data.porchId).points[0],updated=updateSegmentMeasurement(data.project,data.houseId,data.sourceSegmentId,{length:45,enteredText:'45.0'}),after=resolveFeaturePath(updated,data.porchId).points[0];expect(updated.features[0].segments[0].length).toBe(45);expect(updated.features[0].segments[0].enteredText).toBe('45.0');expect(after).toEqual(before)});
+  it('keeps invalid dependent measurements and flags them for review',()=>{const data=projectWithPorch(),porch=data.project.features.find(item=>item.id===data.porchId)!;if(porch.startAnchor.type!=='station-on-segment')throw new Error('Expected station anchor.');const startAnchor={...porch.startAnchor,distance:35},project={...data.project,features:data.project.features.map(item=>item.id===porch.id?{...item,startAnchor}:item)},updated=updateSegmentMeasurement(project,data.houseId,data.sourceSegmentId,{length:30,enteredText:'30.0'});expect(updated.warnings.some(item=>item.code==='broken-feature-reference'&&item.featureId===data.porchId)).toBe(true)});
+});
