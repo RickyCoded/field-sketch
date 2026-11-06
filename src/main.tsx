@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import App from './v3-ui/V3App';
 import './styles.css';
 import './lot.css';
 import './offset.css';
