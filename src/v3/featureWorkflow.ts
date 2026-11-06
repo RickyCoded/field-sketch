@@ -54,6 +54,11 @@ export function addFeatureSegment(project:ProjectV3,featureId:string,input:Featu
   return{...project,features:project.features.map(item=>item.id===featureId?{...item,segments:[...item.segments,instruction],endAnchor:undefined,sharedEdge:undefined,referenceClosure:undefined}:item),warnings:project.warnings.filter(item=>item.id!==warningId(featureId)),updatedAt:timestamp};
 }
 
+export function removeLastFeatureSegment(project:ProjectV3,featureId:string):ProjectV3{
+  const target=feature(project,featureId);if(target.kind==='house')throw new Error('Use the house measurement workflow for house walls.');if(!target.segments.length)return project;
+  const timestamp=now();return{...project,features:project.features.map(item=>item.id===featureId?{...item,segments:item.segments.slice(0,-1),endAnchor:undefined,sharedEdge:undefined,referenceClosure:undefined}:item),warnings:project.warnings.filter(item=>item.id!==warningId(featureId)),updatedAt:timestamp};
+}
+
 export interface ReturnToReferenceReview {missDistance:number;status:ReferenceClosure['status'];sourceStation:number;projectedPoint:PointFt;endpoint:PointFt}
 export function reviewReturnToReference(project:ProjectV3,featureId:string,sourceFeatureId:string,sourceSegmentId:string):ReturnToReferenceReview{
   const targetPath=resolveFeaturePath(project,featureId);if(!targetPath.lines.length)throw new Error('Draw at least one segment before closing against a reference.');const endpoint=targetPath.points.at(-1)!,source=resolveFeatureSegment(project,sourceFeatureId,sourceSegmentId),vector=subtract(source.end,source.start),length=distance(source.start,source.end),direction=unit(vector),rawStation=dot(subtract(endpoint,source.start),direction),sourceStation=Math.max(0,Math.min(length,rawStation)),projectedPoint=add(source.start,scale(direction,sourceStation)),missDistance=distance(endpoint,projectedPoint),status=missDistance<=.005?'closed':missDistance<=CLOSURE_TOLERANCE_FT+EPSILON?'within-field-tolerance':'outside-field-tolerance';return{missDistance,status,sourceStation,projectedPoint,endpoint};
